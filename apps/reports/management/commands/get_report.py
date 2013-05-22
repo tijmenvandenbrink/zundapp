@@ -4,6 +4,7 @@ import requests
 from requests.auth import HTTPBasicAuth
 
 from django.core.management.base import BaseCommand
+from django.db import IntegrityError
 from ....reports.models import ClientSession
 from ....reports.utils import parse_datetime, get_env_variable
 
@@ -115,7 +116,10 @@ def get_client_sessions():
                            access_technology_type=data['pmipAccessTechnology'],
                            local_link_identifier=data['pmipLocalLinkId'],
                            lma=data['pmipLmaName'])
-        cs.save()
+        try:
+            cs.save()
+        except IntegrityError, e:
+            logger.debug("Duplicate entry exists: {}".format(e))
 
 
 class Command(BaseCommand):
