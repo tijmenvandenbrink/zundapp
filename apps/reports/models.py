@@ -100,7 +100,7 @@ class AccessPointLoad(models.Model):
     """
     ap_name = models.CharField(max_length=20)
     timestamp = models.DateTimeField()
-    bandwidth_available = models.DecimalField()
+    bandwidth_available = models.DecimalField(max_digits=10, decimal_places=1)
 
     class Meta:
         ordering = ['ap_name', 'timestamp']

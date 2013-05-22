@@ -94,10 +94,10 @@ MIDDLEWARE_CLASSES = (
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-ROOT_URLCONF = 'bubbles.urls'
+ROOT_URLCONF = 'zundapp.urls'
 
 # Python dotted path to the WSGI application used by Django's runserver.
-WSGI_APPLICATION = 'bubbles.wsgi.application'
+WSGI_APPLICATION = 'zundapp.wsgi.application'
 
 INSTALLED_APPS = (
     'django.contrib.auth',
