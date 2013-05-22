@@ -58,6 +58,10 @@ def get_client_sessions():
                          "[{} - {}]".format(data['clientUsername'], data['sessionStartTime']))
             continue
 
+        sessionEndTime = parse_datetime(data['sessionEndTime'])
+        sessionStartTime = parse_datetime(data['sessionStartTime'])
+        sessionDuration = (sessionEndTime - sessionStartTime).total_seconds()
+
         cs = ClientSession(client_username=data['clientUsername'],
                            client_ip_address=data['clientIpAddress'],
                            client_mac_address=data['clientMacAddress'],
@@ -70,7 +74,7 @@ def get_client_sessions():
                            profile=data['profileName'],
                            vlan_id=data['clientVlanIdDisplay'],
                            protocol=data['protocol'],
-                           session_duration=data['sessionTime'],
+                           session_duration=sessionDuration,
                            policy_type=data['policyType'],
                            avg_session_throughput=str(data['throughput']).translate(None, '< '),
                            host_name=data['clientHostName'],
