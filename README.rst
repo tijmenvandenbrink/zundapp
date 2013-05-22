@@ -164,7 +164,7 @@ Set environment variables
 
 The following environment variables should be set:
 
-::
+.. code:: python
     ZUNDAPPENV=<DEV|PROD>
     ZUNDAPPPATH=<project path>
     CISCOPIHOST=<ip address>
@@ -179,7 +179,7 @@ The following environment variables should be set:
 Virtualenv + Zundapp install
 ============================
 
-::
+.. code:: bash
     virtualenv zundapp-env
     git clone git://github.com/tijmenvandenbrink/zundapp.git
 
