@@ -17,7 +17,6 @@ def get_report(report_title):
     :type report_title: string
     :returns: request.models.Response object
     """
-    # todo: Get from environment variables
     CISCOPIHOST=get_env_variable('CISCOPIHOST')
     CISCOPIUSER=get_env_variable('CISCOPIUSER')
     CISCOPIPASSWD=get_env_variable('CISCOPIPASSWD')

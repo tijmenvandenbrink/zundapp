@@ -63,7 +63,7 @@ LOGGING = {
             'level': 'ERROR',
             'propagate': True,
         },
-        'apps.core': {
+        'apps.reports': {
             'handlers': ['console'],
             'level': 'DEBUG',
         },
