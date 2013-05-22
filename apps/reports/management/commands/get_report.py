@@ -46,7 +46,7 @@ def get_client_sessions():
         -78 dBm @ MCS6
         -75 dBm @ MCS7
     """
-    r = get_client_sessions('api-clientsessions')
+    r = get_report('api-clientsessions')
 
     for session in r.json()['mgmtResponse']['reportDataDTO']['dataRows']['dataRow']:
         data = {}
