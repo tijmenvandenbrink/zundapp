@@ -113,5 +113,5 @@ INSTALLED_APPS = (
     # third party apps
     'south',
     # project apps
-    'reports',
+    'apps.reports',
 )
