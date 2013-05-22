@@ -76,7 +76,7 @@ def get_client_sessions():
                            protocol=data['protocol'],
                            session_duration=sessionDuration,
                            policy_type=data['policyType'],
-                           avg_session_throughput=str(data['throughput']).translate(None, '< '),
+                           avg_session_throughput=str(data['throughput']).translate(None, '< ,'),
                            host_name=data['clientHostName'],
                            client_type=data['className'],
                            global_unique=data['globalUnique'],
