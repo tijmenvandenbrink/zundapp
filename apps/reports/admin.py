@@ -11,4 +11,4 @@ class ClientSessionAdmin(admin.ModelAdmin):
                     'disassociation_time', 'vendor', 'ap_name', 'snr', 'rssi', 'status', )
     search_fields = ('client_username', 'client_ip_address', 'client_mac_address', 'ap_name')
 
-admin.site.register(ClientSession)
+admin.site.register(ClientSession, ClientSessionAdmin)
