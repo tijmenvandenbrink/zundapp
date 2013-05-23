@@ -51,11 +51,6 @@ def get_client_sessions():
         #    continue
 
         sessionStartTime = parse_datetime(data['sessionStartTime'])
-        sessionDuration = ''
-
-        if not data['sessionEndTime'] == '':
-            sessionEndTime = parse_datetime(data['sessionEndTime'])
-            sessionDuration = (sessionEndTime - sessionStartTime).total_seconds()
 
         defaults = {'client_ip_address': data['clientIpAddress'],
                     'client_mac_address': data['clientMacAddress'],
@@ -67,7 +62,6 @@ def get_client_sessions():
                     'profile': data['profileName'],
                     'vlan_id': data['clientVlanIdDisplay'],
                     'protocol': data['protocol'],
-                    'session_duration': sessionDuration,
                     'policy_type': data['policyType'],
                     'avg_session_throughput': str(data['throughput']).translate(None, '< ,'),
                     'host_name': data['clientHostName'],
@@ -84,7 +78,6 @@ def get_client_sessions():
                     'port': data['switchPortString'],
                     'anchor_controller': str(data['anchorControllerIpAddress']).translate(None, ' '),
                     'association_id': data['aidString'],
-                    'disassociation_time': parse_datetime(data['sessionEndTime']),
                     'encryption_cipher': data['encryptionCypher'],
                     'eap_type': data['eapType'],
                     'authentication_algorithm': data['authenticationAlgorithm'],
@@ -109,6 +102,12 @@ def get_client_sessions():
                     'local_link_identifier': data['pmipLocalLinkId'],
                     'lma': data['pmipLmaName']
                     }
+
+        if not data['sessionEndTime'] == '':
+            defaults['disassociation_time'] = parse_datetime(data['sessionEndTime'])
+            defaults['session_duration'] = (parse_datetime(data['sessionEndTime']) - sessionStartTime).total_seconds()
+        else:
+            defaults['session_duration'] = ''
 
         cs, created = ClientSession.objects.get_or_create(client_username=data['clientUsername'],
                                                           association_time=parse_datetime(data['sessionStartTime']),
