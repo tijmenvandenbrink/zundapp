@@ -104,7 +104,9 @@ def get_client_sessions():
         else:
             defaults['session_duration'] = ''
 
-        logger.debug("Saving ClientSession object: {} - {}".format(data['clientUsername'], data['sessionStartTime']))
+        logger.debug("Saving ClientSession object: {} - {} - {}".format(data['clientUsername'],
+                                                                        data['sessionStartTime'],
+                                                                        defaults))
         cs, created = ClientSession.objects.get_or_create(client_username=data['clientUsername'],
                                                           association_time=parse_datetime(data['sessionStartTime']),
                                                           defaults=defaults)
