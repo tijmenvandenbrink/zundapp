@@ -45,11 +45,6 @@ def get_client_sessions():
         for record in session['entries']['entry']:
             data[record['attributeName']] = record['dataValue']
 
-        #if data['sessionEndTime'] == '':
-        #    logger.debug("Session hasn't ended yet. Will be added during next run if session has ended."
-        #                 "[{} - {}]".format(data['clientUsername'], data['sessionStartTime']))
-        #    continue
-
         sessionStartTime = parse_datetime(data['sessionStartTime'])
 
         defaults = {'client_ip_address': data['clientIpAddress'],
@@ -109,6 +104,7 @@ def get_client_sessions():
         else:
             defaults['session_duration'] = ''
 
+        logger.debug("Saving ClientSession object: {} - {}".format(data['clientUsername'], data['sessionStartTime']))
         cs, created = ClientSession.objects.get_or_create(client_username=data['clientUsername'],
                                                           association_time=parse_datetime(data['sessionStartTime']),
                                                           defaults=defaults)
