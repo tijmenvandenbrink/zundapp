@@ -102,7 +102,6 @@ def get_client_sessions():
             defaults['disassociation_time'] = parse_datetime(data['sessionEndTime'])
             defaults['session_duration'] = (parse_datetime(data['sessionEndTime']) - sessionStartTime).total_seconds()
         else:
-            defaults['disassociation_time'] = ''
             defaults['session_duration'] = 0
 
         logger.debug("Saving ClientSession object: {} - {} - {}".format(data['clientUsername'],

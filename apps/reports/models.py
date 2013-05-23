@@ -60,7 +60,7 @@ class ClientSession(models.Model):
     port = models.IntegerField(blank=True)
     anchor_controller = models.GenericIPAddressField(protocol='both', blank=True)
     association_id = models.PositiveIntegerField()
-    disassociation_time = models.DateTimeField(blank=True)
+    disassociation_time = models.DateTimeField(blank=True, null=True)
     encryption_cipher = models.CharField(max_length=20, blank=True)
     eap_type = models.CharField(max_length=20, blank=True)
     authentication_algorithm = models.CharField(max_length=20, blank=True)
