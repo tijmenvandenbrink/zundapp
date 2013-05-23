@@ -126,7 +126,6 @@ class Command(BaseCommand):
             )
 
     def handle(self, report, *args, **options):
-
         logger.debug('Running "{}" report from Cisco Prime Infra'.format(report))
         if report == 'api-clientsessions':
             get_client_sessions()

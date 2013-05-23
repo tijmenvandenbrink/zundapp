@@ -59,15 +59,7 @@ LOGGING = {
             'level': 'ERROR',
             'propagate': True,
         },
-        'zundapp.apps.reports': {
-            'handlers': ['console'],
-            'level': 'DEBUG',
-        },
-        'zundapp.apps.reports.management.commands': {
-            'handlers': ['console'],
-            'level': 'DEBUG',
-        },
-        'zundapp.apps.reports.management.commands.get_report': {
+        'apps.reports': {
             'handlers': ['console'],
             'level': 'DEBUG',
         }
