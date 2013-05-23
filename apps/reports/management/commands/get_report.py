@@ -110,9 +110,9 @@ def get_client_sessions():
                     'lma': data['pmipLmaName']
                     }
 
-        cs, created = ClientSession.get_or_create(client_username=data['clientUsername'],
-                                                  association_time=parse_datetime(data['sessionStartTime']),
-                                                  defaults=defaults)
+        cs, created = ClientSession.objects.get_or_create(client_username=data['clientUsername'],
+                                                          association_time=parse_datetime(data['sessionStartTime']),
+                                                          defaults=defaults)
 
         if not created:
             cs.update(**defaults)
