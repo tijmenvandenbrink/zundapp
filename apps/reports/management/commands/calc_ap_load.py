@@ -18,27 +18,27 @@ def calculate_bandwidth(timestamp):
 
     Cisco APs will share the bandwidth equally over all connected clients, meaning that clients in MCS index 0 are
     expensive because they require more airtime to get the same data throughput as a client in MCS index 7.
-    The airtime index defines a client’s share of airtime. Depending on the MCS index the client is in, it will need
+    The airtime index defines a client's share of airtime. Depending on the MCS index the client is in, it will need
     more airtime to get the same throughput as a client in a higher MCS index. A client in MCS index 0 would need a
     total of 0.1388 seconds to transfer 1Mbit. A client in MCS index 7 would only need 0.01385 seconds to transfer
-    1 Mbit. See column “airtime index” in Table 1.
+    1 Mbit. See column "airtime index" in Table 1.
 
     If we want to calculate the max amount of data throughput for the users connected to a Cisco AP we would first need
     to know how many clients are connected and in which MCS index they are.
 
     Then we would calculate the amount of airtime the clients in a certain MCS index would require resulting in an equal
     data throughput for all clients. If we sum the product of airtime index and the number of clients we can calculate
-    the number of seconds the clients would need to each transfer 1Mbit. See column “Sum airtime (s/Mbits)” in Table 1.
+    the number of seconds the clients would need to each transfer 1Mbit. See column "Sum airtime (s/Mbits)" in Table 1.
 
-    Sum airtime = clients_MCS0 x α_MCS0 + clients_MCS1 x α_MCS1 + clients_MCS2 x α_MCS2 + clients_MCS3 x α_MCS3 +
-                  clients_MCS4 x α_MCS4 + clients_MCS5 x α_MCS5 + clients_MCS6 x α_MCS6 + clients_MCS7 x α_MCS7
+    Sum airtime = clients_MCS0 x a_MCS0 + clients_MCS1 x a_MCS1 + clients_MCS2 x a_MCS2 + clients_MCS3 x a_MCS3 +
+                  clients_MCS4 x a_MCS4 + clients_MCS5 x a_MCS5 + clients_MCS6 x a_MCS6 + clients_MCS7 x a_MCS7
 
-    With this total we can calculate the amount of airtime (See column “total airtime (%)”) the clients in a particular
+    With this total we can calculate the amount of airtime (See column "total airtime (%)) the clients in a particular
     MCS index will get and therefor how much data they can potentially transfer.
 
     The bandwidth available to a user can be calculated as follows:
 
-    BW = (β_MCS0 x γ) / clients_MCS0
+    BW = (b_MCS0 x g) / clients_MCS0
 
     :param timestamp: timestamp for which the bw available to clients on a certain access point should be calculated
     :type timestamp: datetime
