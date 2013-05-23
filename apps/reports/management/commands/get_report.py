@@ -114,7 +114,9 @@ def get_client_sessions():
                                                           defaults=defaults)
 
         if not created:
-            cs.update(**defaults)
+            for k, v in defaults.items():
+                setattr(cs, k, v)
+            cs.save()
 
 
 class Command(BaseCommand):
