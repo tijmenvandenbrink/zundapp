@@ -43,7 +43,7 @@ class ClientSession(models.Model):
     profile = models.CharField(max_length=50, blank=True)
     vlan_id = models.IntegerField()
     protocol = models.CharField(max_length=50)
-    session_duration = models.PositiveIntegerField()
+    session_duration = models.PositiveIntegerField(blank=True)
     policy_type = models.CharField(max_length=20, blank=True)
     avg_session_throughput = models.DecimalField(max_digits=10, decimal_places=1)
     host_name = models.CharField(max_length=50, blank=True)
@@ -60,7 +60,7 @@ class ClientSession(models.Model):
     port = models.IntegerField(blank=True)
     anchor_controller = models.GenericIPAddressField(protocol='both', blank=True)
     association_id = models.PositiveIntegerField()
-    disassociation_time = models.DateTimeField()
+    disassociation_time = models.DateTimeField(blank=True)
     encryption_cipher = models.CharField(max_length=20, blank=True)
     eap_type = models.CharField(max_length=20, blank=True)
     authentication_algorithm = models.CharField(max_length=20, blank=True)
@@ -95,11 +95,19 @@ class ClientSession(models.Model):
 
 class AccessPointLoad(models.Model):
     """
-        This model provides the maximum bandwidth available to clients connected to a specific Access Point at any given
-        period of time.
+        This model holds the maximum bandwidth available to clients
+        connected to a specific Access Point at a certain time.
     """
     ap_name = models.CharField(max_length=20)
     timestamp = models.DateTimeField()
+    clients_mcs_0 = models.PositiveIntegerField()
+    clients_mcs_1 = models.PositiveIntegerField()
+    clients_mcs_2 = models.PositiveIntegerField()
+    clients_mcs_3 = models.PositiveIntegerField()
+    clients_mcs_4 = models.PositiveIntegerField()
+    clients_mcs_5 = models.PositiveIntegerField()
+    clients_mcs_6 = models.PositiveIntegerField()
+    clients_mcs_7 = models.PositiveIntegerField()
     bandwidth_available = models.DecimalField(max_digits=10, decimal_places=1)
 
     class Meta:
@@ -108,5 +116,3 @@ class AccessPointLoad(models.Model):
 
     def __unicode__(self):
         return "{} - {}".format(self.ap_name, self.timestamp)
-
-    pass
