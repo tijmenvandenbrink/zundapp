@@ -22,8 +22,6 @@ def get_access_points():
                     'client_count': data['clientCount'],
                     'client_count_2_4': data['clientCount_2_4GHz'],
                     'client_count_5': data['clientCount_5GHz'],
-                    'controller_ip_address': data['controllerIpAddress'],
-                    'controller_name': data['controllerName'],
                     'country_code': data['countryCode'],
                     'ethernet_mac': data['ethernetMac'],
                     'hreap_enabled': data['hreapEnabled'],
@@ -38,6 +36,12 @@ def get_access_points():
                     'type': data['type'],
                     'uptime': data['upTime'],
                     }
+
+        if 'controllerIpAddress' in data:
+            defaults['controller_ip_address'] = data['controllerIpAddress']
+
+        if 'controller_name' in data:
+            defaults['controller_name'] = data['controllerName']
 
         access_point, created = AccessPoint.objects.get_or_create(name=data['name'], defaults=defaults)
 
