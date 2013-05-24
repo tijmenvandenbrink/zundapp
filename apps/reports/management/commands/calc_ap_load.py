@@ -1,6 +1,8 @@
 import logging
 import sys
 from datetime import datetime, timedelta
+import pytz
+from optparse import make_option
 
 from django.core.management.base import BaseCommand
 from django.db import IntegrityError
@@ -9,6 +11,7 @@ from django.db.models import Q
 from ....reports.models import ClientSession, AccessPointLoad
 from ....reports.utils import get_mcs_index, get_available_bandwidth
 from ....reports.report_settings import SAMPLE_INTERVAL, CALCULATE_AP_LOAD_LAG
+from zundapp.settings.base import TIME_ZONE
 
 logger = logging.getLogger(__name__)
 
@@ -81,15 +84,23 @@ def calculate_bandwidth(timestamp):
 
 
 class Command(BaseCommand):
-    args = 'start'
+    args = '<start>'
     help = "Calculates the bandwidth available to clients connected to a certain access point." \
            "format: 'YYYY-MM-dd HH:SS'"
+    option_list = BaseCommand.option_list + (make_option('--start',
+                                                         dest='start',
+                                                         help=('Start calculating from this time. Provide datetime '
+                                                               'in format: 2013-05-23 23:12')),
+                                             )
 
     def handle(self, *args, **options):
-        now = datetime.now().replace(second=0, microsecond=0)
+        now = datetime.utcnow().replace(second=0, microsecond=0, tzinfo=pytz.utc)
         if 'start' in options:
             try:
-                t = datetime.strptime(options['start'], '%Y-%m-%d %H:%M')
+                naive = datetime.strptime(options['start'], '%Y-%m-%d %H:%M')
+                local = pytz.timezone(TIME_ZONE)
+                local_dt = local.localize(naive, is_dst=None)
+                t = local_dt.astimezone(pytz.utc)
             except ValueError, e:
                 logger.critical("ValueError: {}".format(e))
                 logger.critical("Please provide a valid format (e.g. 2013-05-23 23:12)")
@@ -98,7 +109,8 @@ class Command(BaseCommand):
             t = now - timedelta(seconds=CALCULATE_AP_LOAD_LAG)
 
         while t <= now:
-            logger.debug("Starting calculations for {} - {}".format(t.strftime('%a %b %d %H:%M %Y'),
-                                                                    now.strftime('%a %b %d %H:%M %Y')))
+            logger.debug("Starting calculations for {} - {}".format(t.strftime('%a %b %d %H:%M %Y %Z'),
+                                                                    (t + timedelta(seconds=SAMPLE_INTERVAL)
+                                                                     ).strftime('%a %b %d %H:%M %Y %Z')))
             calculate_bandwidth(t)
             t += timedelta(seconds=SAMPLE_INTERVAL)
