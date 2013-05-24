@@ -112,7 +112,9 @@ class Command(BaseCommand):
                                                          help=('Start calculating from this time. Provide datetime '
                                                                'in format: 2013-05-23 23:12')),
                                              make_option('--recalc',
+                                                         action='store_true',
                                                          dest='recalc',
+                                                         default=False,
                                                          help='Overwrite existing calculations.')
                                              )
 
