@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 
 def get_access_points():
     """ Stores access points retrieved from Cisco Prime Infra """
-    PARAMS = {'.full': 'True', 'async': 'False', }
+    PARAMS = {'.full': 'true', 'async': 'false', }
     access_points = CiscoPrimeResource('/webacs/api/v1/data/AccessPoints', PARAMS)
 
     r = access_points.get()
