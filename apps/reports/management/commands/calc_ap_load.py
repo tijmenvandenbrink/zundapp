@@ -90,17 +90,17 @@ def calculate_bandwidth(timestamp, **options):
         except IntegrityError, e:
             logger.debug("Duplicate entry exists: {}".format(e))
             if options['recalc']:
-                AccessPointLoad.objects.get(ap_name=ap,
-                                            timestamp=timestamp
-                                            ).update(clients_mcs_0=stats[0],
-                                                     clients_mcs_1=stats[1],
-                                                     clients_mcs_2=stats[2],
-                                                     clients_mcs_3=stats[3],
-                                                     clients_mcs_4=stats[4],
-                                                     clients_mcs_5=stats[5],
-                                                     clients_mcs_6=stats[6],
-                                                     clients_mcs_7=stats[7],
-                                                     bandwidth_available=get_available_bandwidth(stats))
+                AccessPointLoad.objects.filter(ap_name=ap,
+                                               timestamp=timestamp
+                                               ).update(clients_mcs_0=stats[0],
+                                                        clients_mcs_1=stats[1],
+                                                        clients_mcs_2=stats[2],
+                                                        clients_mcs_3=stats[3],
+                                                        clients_mcs_4=stats[4],
+                                                        clients_mcs_5=stats[5],
+                                                        clients_mcs_6=stats[6],
+                                                        clients_mcs_7=stats[7],
+                                                        bandwidth_available=get_available_bandwidth(stats))
 
 
 class Command(BaseCommand):
