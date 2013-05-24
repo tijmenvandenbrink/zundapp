@@ -59,6 +59,10 @@ def calculate_bandwidth(timestamp):
                                             Q(association_time__gte=start, association_time__lte=end,
                                               disassociation_time__gte=end))
 
+    logger.debug("Found a total of {} concurrent sessions during {} - {}".format(len(sessions),
+                                                                                 start.strftime('%a %b %d %H:%M %Y %Z'),
+                                                                                 end.strftime('%a %b %d %H:%M %Y %Z')))
+
     data = {}
     for session in sessions:
         data.setdefault(session.ap_name, {0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0})
@@ -79,23 +83,24 @@ def calculate_bandwidth(timestamp):
 
         try:
             apl.save()
+            logger.debug("Successfully saved AccessPointLoad object in database:"
+                         " {} - BW available: {}".format(apl, apl.bandwidth_available))
         except IntegrityError, e:
             logger.debug("Duplicate entry exists: {}".format(e))
 
 
 class Command(BaseCommand):
     args = '<start>'
-    help = "Calculates the bandwidth available to clients connected to a certain access point." \
-           "format: 'YYYY-MM-dd HH:SS'"
+    help = ("Calculates the bandwidth available to clients connected to a certain access point."
+            " Provide date in format: 'YYYY-MM-dd HH:SS'")
     option_list = BaseCommand.option_list + (make_option('--start',
                                                          dest='start',
                                                          help=('Start calculating from this time. Provide datetime '
-                                                               'in format: 2013-05-23 23:12')),
-                                             )
+                                                               'in format: 2013-05-23 23:12')),)
 
     def handle(self, *args, **options):
         now = datetime.utcnow().replace(second=0, microsecond=0, tzinfo=pytz.utc)
-        if 'start' in options:
+        if options['start']:
             try:
                 naive = datetime.strptime(options['start'], '%Y-%m-%d %H:%M')
                 local = pytz.timezone(TIME_ZONE)
@@ -110,7 +115,7 @@ class Command(BaseCommand):
 
         while t <= now:
             logger.debug("Starting calculations for {} - {}".format(t.strftime('%a %b %d %H:%M %Y %Z'),
-                                                                    (t + timedelta(seconds=SAMPLE_INTERVAL)
-                                                                     ).strftime('%a %b %d %H:%M %Y %Z')))
+                                                                   (t + timedelta(seconds=SAMPLE_INTERVAL)
+                                                                    ).strftime('%a %b %d %H:%M %Y %Z')))
             calculate_bandwidth(t)
             t += timedelta(seconds=SAMPLE_INTERVAL)
