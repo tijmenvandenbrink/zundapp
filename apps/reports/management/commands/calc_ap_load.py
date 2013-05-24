@@ -8,7 +8,7 @@ from django.core.management.base import BaseCommand
 from django.db import IntegrityError
 from django.db.models import Q
 
-from ....reports.models import ClientSession, AccessPointLoad
+from ....reports.models import ClientSession, AccessPoint, AccessPointLoad
 from ....reports.utils import get_mcs_index, get_available_bandwidth
 from ....reports.report_settings import SAMPLE_INTERVAL, CALCULATE_AP_LOAD_LAG
 from zundapp.settings.base import TIME_ZONE
@@ -64,8 +64,10 @@ def calculate_bandwidth(timestamp):
                                                                                  end.strftime('%a %b %d %H:%M %Y %Z')))
 
     data = {}
+    for access_point in AccessPoint.objects.all():
+        data.setdefault(access_point.name, {0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0})
+
     for session in sessions:
-        data.setdefault(session.ap_name, {0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0})
         data[session.ap_name][get_mcs_index(session.rssi)] += 1
 
     for ap, stats in data.items():
