@@ -102,3 +102,31 @@ def get_env_variable(var_name):
     except KeyError:
         error_msg = "Set the %s env variable" % var_name
     raise ImproperlyConfigured(error_msg)
+
+
+class CiscoPrimeResource():
+    """ Get resources from Cisco Prime Infra API """
+
+    def __init__(self, url, **params):
+        self.url = 'https://{}{}'.format(get_env_variable('CISCOPIHOST'), url)
+        self.params = params
+        self.headers = {'Accept': 'application/json'}
+
+    def get(self):
+        """ Returns resources from Cisco Prime Infra API
+
+        :returns: request.models.Response object
+        """
+        import requests
+        from requests.auth import HTTPBasicAuth
+
+        logger.debug('Requesting data from endpoint: {}'.format(self.url))
+        r = requests.get(self.url, params=self.params, auth=HTTPBasicAuth(get_env_variable('CISCOPIUSER'),
+                                                                          get_env_variable('CISCOPIPASSWD')),
+                         verify=False, headers=self.headers)
+
+        if not r.status_code == requests.codes.ok:
+            logger.critical("We could not run the report: {} at {}".format(self.url))
+            r.raise_for_status()
+
+        return r

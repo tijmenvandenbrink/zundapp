@@ -93,6 +93,36 @@ class ClientSession(models.Model):
         return "{} - ({} - {})".format(self.client_username, self.association_time, self.disassociation_time)
 
 
+class AccessPoint(models.Model):
+    """
+        Access point model
+        https://<ip>/webacs/api/v1/data/AccessPoints?.full=true
+    """
+    admin_status = models.CharField(max_length=25)
+    boot_version = models.CharField(max_length=25)
+    client_count = models.PositiveIntegerField()
+    client_count_2_4 = models.PositiveIntegerField()
+    client_count_5 = models.PositiveIntegerField()
+    controller_ip_address = models.GenericIPAddressField(protocol='both')
+    controller_name = models.CharField(max_length=25)
+    country_code = models.CharField(max_length=10, blank=True)
+    ethernet_mac = models.CharField(max_length=17)
+    hreap_enabled = models.BooleanField()
+    ip_address = models.GenericIPAddressField(protocol='both')
+    location = models.CharField(max_length=50)
+    lwapp_uptime = models.BigIntegerField()
+    mac_address = models.CharField(max_length=17)
+    model = models.CharField(max_length=20)
+    name = models.CharField(max_length=25, unique=True)
+    serial = models.CharField(max_length=30)
+    software_version = models.CharField(max_length=30)
+    status = models.CharField(max_length=15)
+    type = models.CharField(max_length=15)
+    uptime = models.BigIntegerField()
+
+    def __unicode__(self):
+        return "{} ({})".format(self.name, self.type)
+
 class AccessPointLoad(models.Model):
     """
         This model holds the maximum bandwidth available to clients
