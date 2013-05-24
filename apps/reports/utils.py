@@ -107,7 +107,7 @@ def get_env_variable(var_name):
 class CiscoPrimeResource():
     """ Get resources from Cisco Prime Infra API """
 
-    def __init__(self, url, **params):
+    def __init__(self, url, params):
         self.url = 'https://{}{}'.format(get_env_variable('CISCOPIHOST'), url)
         self.params = params
         self.headers = {'Accept': 'application/json'}
