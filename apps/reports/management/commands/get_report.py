@@ -12,7 +12,9 @@ def get_client_sessions():
     """ Stores ClientSessions retrieved from Cisco Prime Infra """
 
     PARAMS = {'reportTitle': 'api-clientsessions', 'async': 'false', }
-    r = CiscoPrimeResource('/webacs/api/v1/op/reportService/report', PARAMS)
+    report = CiscoPrimeResource('/webacs/api/v1/op/reportService/report', PARAMS)
+
+    r = report.get()
 
     for session in r.json()['mgmtResponse']['reportDataDTO']['dataRows']['dataRow']:
         data = {}
