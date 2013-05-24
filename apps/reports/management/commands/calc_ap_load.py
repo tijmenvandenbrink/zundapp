@@ -16,7 +16,7 @@ from zundapp.settings.base import TIME_ZONE
 logger = logging.getLogger(__name__)
 
 
-def calculate_bandwidth(timestamp):
+def calculate_bandwidth(timestamp, **options):
     """ Creates AccessPointLoad objects
 
     Cisco APs will share the bandwidth equally over all connected clients, meaning that clients in MCS index 0 are
@@ -89,6 +89,18 @@ def calculate_bandwidth(timestamp):
                          " {} - BW available: {}".format(apl, apl.bandwidth_available))
         except IntegrityError, e:
             logger.debug("Duplicate entry exists: {}".format(e))
+            if options['recalc']:
+                AccessPointLoad.objects.get(ap_name=ap,
+                                            timestamp=timestamp
+                                            ).update(clients_mcs_0=stats[0],
+                                                     clients_mcs_1=stats[1],
+                                                     clients_mcs_2=stats[2],
+                                                     clients_mcs_3=stats[3],
+                                                     clients_mcs_4=stats[4],
+                                                     clients_mcs_5=stats[5],
+                                                     clients_mcs_6=stats[6],
+                                                     clients_mcs_7=stats[7],
+                                                     bandwidth_available=get_available_bandwidth(stats))
 
 
 class Command(BaseCommand):
@@ -98,7 +110,11 @@ class Command(BaseCommand):
     option_list = BaseCommand.option_list + (make_option('--start',
                                                          dest='start',
                                                          help=('Start calculating from this time. Provide datetime '
-                                                               'in format: 2013-05-23 23:12')),)
+                                                               'in format: 2013-05-23 23:12')),
+                                             make_option('--recalc',
+                                                         dest='recalc',
+                                                         help='Overwrite existing calculations.')
+                                             )
 
     def handle(self, *args, **options):
         now = datetime.utcnow().replace(second=0, microsecond=0, tzinfo=pytz.utc)
@@ -121,5 +137,5 @@ class Command(BaseCommand):
             logger.debug("Starting calculations for {} - {}".format(t.strftime('%a %b %d %H:%M %Y %Z'),
                                                                    (t + timedelta(seconds=SAMPLE_INTERVAL)
                                                                     ).strftime('%a %b %d %H:%M %Y %Z')))
-            calculate_bandwidth(t)
+            calculate_bandwidth(t, **options)
             t += timedelta(seconds=SAMPLE_INTERVAL)
