@@ -44,8 +44,8 @@ def get_access_points():
         if not created:
             logger.debug('Access Point already exists. Updating it with latest information')
             for k, v in defaults.items():
-                setattr(ap, k, v)
-            ap.save()
+                setattr(access_point, k, v)
+            access_point.save()
         else:
             logger.info('Created new Access Point object: {}'.format(ap))
 
