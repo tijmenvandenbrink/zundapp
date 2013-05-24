@@ -15,8 +15,8 @@ class ClientSessionAdmin(admin.ModelAdmin):
 class AccessPointAdmin(admin.ModelAdmin):
     list_display = ('name', 'type', 'serial', 'ip_address', 'model', 'boot_version', 'software_version',
                     'controller_name', 'location', 'status', 'admin_status', 'uptime')
-    list_filter = ('ap_name', 'type', 'model', 'boot_version', 'software_version', 'status', 'admin_status')
-    search_fields = ('ap_name', 'type', 'model', 'boot_version', 'software_version')
+    list_filter = ('name', 'type', 'model', 'boot_version', 'software_version', 'status', 'admin_status')
+    search_fields = ('name', 'type', 'model', 'boot_version', 'software_version')
 
 
 class AccessPointLoadAdmin(admin.ModelAdmin):
