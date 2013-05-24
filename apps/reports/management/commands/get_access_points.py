@@ -40,7 +40,7 @@ def get_access_points():
         if 'controllerIpAddress' in data:
             defaults['controller_ip_address'] = data['controllerIpAddress']
 
-        if 'controller_name' in data:
+        if 'controllerName' in data:
             defaults['controller_name'] = data['controllerName']
 
         access_point, created = AccessPoint.objects.get_or_create(name=data['name'], defaults=defaults)
