@@ -46,12 +46,15 @@ def calculate_bandwidth(timestamp):
     start = timestamp
     end = timestamp + timedelta(seconds=SAMPLE_INTERVAL)
 
-    sessions = ClientSession.objects.filter(Q(association_time__lte=start, disassociation_time__lte=end) |
+    sessions = ClientSession.objects.filter(Q(association_time__lte=start,
+                                              disassociation_time__gte=start, disassociation_time__lte=end) |
                                             Q(association_time__lte=start, disassociation_time__gte=end) |
-                                            Q(association_time__gte=start, disassociation_time__lte=end) |
+                                            Q(association_time__gte=start, association_time__lte=end,
+                                              disassociation_time__lte=end) |
                                             Q(association_time__lte=start, status='Associated') |
                                             Q(association_time__lte=end, status='Associated') |
-                                            Q(association_time__gte=start, disassociation_time__gte=end))
+                                            Q(association_time__gte=start, association_time__lte=end,
+                                              disassociation_time__gte=end))
 
     data = {}
     for session in sessions:
@@ -88,6 +91,7 @@ class Command(BaseCommand):
             try:
                 t = datetime.strptime(options['start'], '%Y-%m-%d %H:%M')
             except ValueError, e:
+                logger.critical("ValueError: {}".format(e))
                 logger.critical("Please provide a valid format (e.g. 2013-05-23 23:12)")
                 sys.exit(1)
         else:
