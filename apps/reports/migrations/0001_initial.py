@@ -88,6 +88,33 @@ class Migration(SchemaMigration):
         # Adding unique constraint on 'ClientSession', fields ['client_username', 'association_time']
         db.create_unique(u'reports_clientsession', ['client_username', 'association_time'])
 
+        # Adding model 'AccessPoint'
+        db.create_table(u'reports_accesspoint', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('admin_status', self.gf('django.db.models.fields.CharField')(max_length=25)),
+            ('boot_version', self.gf('django.db.models.fields.CharField')(max_length=25)),
+            ('client_count', self.gf('django.db.models.fields.PositiveIntegerField')()),
+            ('client_count_2_4', self.gf('django.db.models.fields.PositiveIntegerField')()),
+            ('client_count_5', self.gf('django.db.models.fields.PositiveIntegerField')()),
+            ('controller_ip_address', self.gf('django.db.models.fields.GenericIPAddressField')(max_length=39)),
+            ('controller_name', self.gf('django.db.models.fields.CharField')(max_length=25)),
+            ('country_code', self.gf('django.db.models.fields.CharField')(max_length=10, blank=True)),
+            ('ethernet_mac', self.gf('django.db.models.fields.CharField')(max_length=17)),
+            ('hreap_enabled', self.gf('django.db.models.fields.BooleanField')(default=False)),
+            ('ip_address', self.gf('django.db.models.fields.GenericIPAddressField')(max_length=39)),
+            ('location', self.gf('django.db.models.fields.CharField')(max_length=50)),
+            ('lwapp_uptime', self.gf('django.db.models.fields.BigIntegerField')()),
+            ('mac_address', self.gf('django.db.models.fields.CharField')(max_length=17)),
+            ('model', self.gf('django.db.models.fields.CharField')(max_length=20)),
+            ('name', self.gf('django.db.models.fields.CharField')(unique=True, max_length=25)),
+            ('serial', self.gf('django.db.models.fields.CharField')(max_length=30)),
+            ('software_version', self.gf('django.db.models.fields.CharField')(max_length=30)),
+            ('status', self.gf('django.db.models.fields.CharField')(max_length=15)),
+            ('type', self.gf('django.db.models.fields.CharField')(max_length=15)),
+            ('uptime', self.gf('django.db.models.fields.BigIntegerField')()),
+        ))
+        db.send_create_signal(u'reports', ['AccessPoint'])
+
         # Adding model 'AccessPointLoad'
         db.create_table(u'reports_accesspointload', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
@@ -128,11 +155,39 @@ class Migration(SchemaMigration):
         # Deleting model 'ClientSession'
         db.delete_table(u'reports_clientsession')
 
+        # Deleting model 'AccessPoint'
+        db.delete_table(u'reports_accesspoint')
+
         # Deleting model 'AccessPointLoad'
         db.delete_table(u'reports_accesspointload')
 
 
     models = {
+        u'reports.accesspoint': {
+            'Meta': {'object_name': 'AccessPoint'},
+            'admin_status': ('django.db.models.fields.CharField', [], {'max_length': '25'}),
+            'boot_version': ('django.db.models.fields.CharField', [], {'max_length': '25'}),
+            'client_count': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'client_count_2_4': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'client_count_5': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'controller_ip_address': ('django.db.models.fields.GenericIPAddressField', [], {'max_length': '39'}),
+            'controller_name': ('django.db.models.fields.CharField', [], {'max_length': '25'}),
+            'country_code': ('django.db.models.fields.CharField', [], {'max_length': '10', 'blank': 'True'}),
+            'ethernet_mac': ('django.db.models.fields.CharField', [], {'max_length': '17'}),
+            'hreap_enabled': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'ip_address': ('django.db.models.fields.GenericIPAddressField', [], {'max_length': '39'}),
+            'location': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
+            'lwapp_uptime': ('django.db.models.fields.BigIntegerField', [], {}),
+            'mac_address': ('django.db.models.fields.CharField', [], {'max_length': '17'}),
+            'model': ('django.db.models.fields.CharField', [], {'max_length': '20'}),
+            'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '25'}),
+            'serial': ('django.db.models.fields.CharField', [], {'max_length': '30'}),
+            'software_version': ('django.db.models.fields.CharField', [], {'max_length': '30'}),
+            'status': ('django.db.models.fields.CharField', [], {'max_length': '15'}),
+            'type': ('django.db.models.fields.CharField', [], {'max_length': '15'}),
+            'uptime': ('django.db.models.fields.BigIntegerField', [], {})
+        },
         u'reports.accesspointload': {
             'Meta': {'ordering': "['ap_name', 'timestamp']", 'unique_together': "(('ap_name', 'timestamp'),)", 'object_name': 'AccessPointLoad'},
             'ap_name': ('django.db.models.fields.CharField', [], {'max_length': '20'}),
