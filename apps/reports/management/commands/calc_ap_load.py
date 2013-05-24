@@ -113,6 +113,8 @@ class Command(BaseCommand):
         else:
             t = now - timedelta(seconds=CALCULATE_AP_LOAD_LAG)
 
+        logger.info("Running calc_ap_load starting from: {} till {}".format(t.strftime('%a %b %d %H:%M %Y %Z'),
+                                                                            now.strftime('%a %b %d %H:%M %Y %Z')))
         while t <= now:
             logger.debug("Starting calculations for {} - {}".format(t.strftime('%a %b %d %H:%M %Y %Z'),
                                                                    (t + timedelta(seconds=SAMPLE_INTERVAL)
