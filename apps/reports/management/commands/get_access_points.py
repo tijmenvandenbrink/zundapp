@@ -42,7 +42,7 @@ def get_access_points():
         access_point, created = AccessPoint.objects.get_or_create(name=data['name'], defaults=defaults)
 
         if not created:
-            logger.debug('AP already existed. Updating it with latest information')
+            logger.debug('Access Point already exists. Updating it with latest information')
             for k, v in defaults.items():
                 setattr(ap, k, v)
             ap.save()
@@ -58,9 +58,3 @@ class Command(BaseCommand):
         logger.debug('Retrieving Access Points from Cisco Prime Infra')
         get_access_points()
         logger.info('Retrieved Access Points from Cisco Prime Infra')
-
-
-
-
-
-
