@@ -164,7 +164,7 @@ Set environment variables
 
 The following environment variables should be set:
 
-::
+```
     ZUNDAPPENV=<DEV|PROD>
     ZUNDAPPPATH=<project path>
     CISCOPIHOST=<ip address>
@@ -174,27 +174,27 @@ The following environment variables should be set:
     ZUNDAPPDBNAME=<databasename>
     ZUNDAPPDBUSER=<databaseuser>
     ZUNDAPPDBPASSWORD=<databasepassword>
-
+```
 
 Virtualenv + Zundapp install
 ============================
 
-::
+```
     virtualenv zundapp-env
     git clone git://github.com/tijmenvandenbrink/zundapp.git
 
     source zundapp-env/bin/activate
     pip install -r zundapp/requirements/requirements.txt
-
+```
 
 Zundapp Development
 ===================
 
 Syncing database:
 
-::
+```
     django-admin.py syncdb --settings=zundapp.settings.dev --pythonpath=$ZUNDAPPPATH
-
+```
 
 
 Zundapp Production
@@ -202,12 +202,12 @@ Zundapp Production
 
 Syncing database:
 
-::
+```
     django-admin.py syncdb --settings=zundapp.settings.prod --pythonpath=$ZUNDAPPPATH
 
     django-admin.py schemamigration apps.reports --initial --settings=zundapp.settings.prod --pythonpath=$ZUNDAPPPATH
     django-admin.py migrate apps.reports --settings=zundapp.settings.prod --pythonpath=$ZUNDAPPPATH
-
+```
 
 Zundapp Commands
 ================
@@ -215,22 +215,23 @@ Zundapp Commands
 Client Session Report
 ---------------------
 
-::
+```
     django-admin.py get_report api-clientsessions --settings=zundapp.settings.prod --pythonpath=$ZUNDAPPPATH
-
+```
 
 Retrieve Access Points
 ----------------------
 
-::
+```
     django-admin.py get_access_points --settings=zundapp.settings.prod --pythonpath=$ZUNDAPPPATH
+```
 
 Calculate Access Point load
 ---------------------------
 
-::
+```
     django-admin.py calc_ap_load --settings=zundapp.settings.prod --pythonpath=$ZUNDAPPPATH
-
+```
 
 Cisco RESTful API
 =================
