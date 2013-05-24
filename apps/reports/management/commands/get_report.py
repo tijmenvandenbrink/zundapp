@@ -1,44 +1,18 @@
 import logging
 
-import requests
-from requests.auth import HTTPBasicAuth
-
 from django.core.management.base import BaseCommand
 from ....reports.models import ClientSession
-from ....reports.utils import parse_datetime, get_env_variable
+from ....reports.utils import parse_datetime
+from ....reports.utils import CiscoPrimeResource
 
 logger = logging.getLogger(__name__)
 
 
-def get_report(report_title):
-    """ Returns report data
-
-    :param report_title: Name of the report
-    :type report_title: string
-    :returns: request.models.Response object
-    """
-    CISCOPIHOST = get_env_variable('CISCOPIHOST')
-    CISCOPIUSER = get_env_variable('CISCOPIUSER')
-    CISCOPIPASSWD = get_env_variable('CISCOPIPASSWD')
-
-    URL = 'https://{}/webacs/api/v1/op/reportService/report'.format(CISCOPIHOST)
-    PARAMS = {'reportTitle': report_title, 'async': 'False', }
-    HEADERS = {'Accept': 'application/json'}
-
-    logger.debug('Requesting data from endpoint: {}'.format(report_title))
-    r = requests.get(URL, params=PARAMS, auth=HTTPBasicAuth(CISCOPIUSER, CISCOPIPASSWD), verify=False, headers=HEADERS)
-    if not r.status_code == requests.codes.ok:
-        logger.critical("We could not run the report: {} at {}".format(report_title), URL)
-        r.raise_for_status()
-
-    return r
-
-
 def get_client_sessions():
-    """
+    """ Stores ClientSessions retrieved from Cisco Prime Infra """
 
-    """
-    r = get_report('api-clientsessions')
+    PARAMS = {'reportTitle': 'api-clientsessions', 'async': 'false', }
+    r = CiscoPrimeResource('/webacs/api/v1/op/reportService/report', PARAMS)
 
     for session in r.json()['mgmtResponse']['reportDataDTO']['dataRows']['dataRow']:
         data = {}
@@ -102,7 +76,7 @@ def get_client_sessions():
             defaults['disassociation_time'] = parse_datetime(data['sessionEndTime'])
             defaults['session_duration'] = (parse_datetime(data['sessionEndTime']) - sessionStartTime).total_seconds()
         else:
-            # todo: log sessions that are still ongoing
+            logger.debug("Session is still ongoing: {}".format(data['clientUsername'], data['sessionStartTime']))
             defaults['session_duration'] = 0
 
         logger.debug("Saving ClientSession object: {} - {} - {}".format(data['clientUsername'],
