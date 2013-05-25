@@ -1,6 +1,4 @@
-===============
-Project Zundapp
-===============
+# Project Zundapp #
 
 This project periodically retrieves information from Cisco Prime Infra through their RESTful API. The main objectives:
 
@@ -12,11 +10,10 @@ This project periodically retrieves information from Cisco Prime Infra through t
 2. Store calculated theoretical bandwidth available to clients connected to an access points (AP) at a certain time.
 
 
-Process cycle
-=============
+## Process cycle ##
 
-Initial steps to take
-=====================
+
+### Initial steps to take ###
 
  1. Define reports in Cisco Prime Infra 1.3 with the appropriate fields.
  1.1 Unique Clients Report
@@ -24,18 +21,15 @@ Initial steps to take
  1.3 Client Traffic Report
  1.4 Client Sessions Report
 
-Continuous steps
-================
+### Continuous steps ###
 
  2. Periodic retrieval of data through RESTful API.
  3. Store calculated theoretical bandwidth available to clients connected to an access points (AP) at a certain time.
 
-===================================
-Define reports in Cisco Prime Infra
-===================================
 
-1.1 Unique Clients Report
-=========================
+## Define reports in Cisco Prime Infra ##
+
+### 1.1 Unique Clients Report ###
 
 This report displays all unique clients by the time, protocol, and controller filters that you select. A unique client is determined by the MAC address of the client device. These clients are sorted by controller in this report.
 
@@ -73,8 +67,7 @@ The following METRICS will be provided by this model:
 
 
 
-1.2 Client Count Report
-=======================
+### 1.2 Client Count Report ###
 
 This trending report displays the total number of active clients on your wireless network.
 
@@ -96,8 +89,8 @@ The following METRICS will be provided by this model:
 * METRIC-1.-03	(Hourly concurrent (WIFI) Users per AP (hourly))
 
 
-1.3 Client Traffic Report
-=========================
+### 1.3 Client Traffic Report ###
+
 Total data volume per AP
 
 This report displays the traffic by the wireless clients on your network.
@@ -109,8 +102,7 @@ The following METRICS will be provided by this model:
 * METRIC-1.-04	(Total data volume per AP (hourly))
 
 
-1.4 Client Session Report
-=========================
+### 1.4 Client Session Report ###
 
 This report provides client sessions for the given period of time. It displays the history of client sessions, statistics, and the duration at which clients are connected to an access point at any given period of time.
 
@@ -155,12 +147,10 @@ The following METRICS will be provided by this model:
 * METRIC-1.-27 (Max Bandwidth per AP per hour (Ux: 16b))
 * METRIC-1.-28 (Max Bandwidth per user per AP per hour (Ux: 16a))
 
-====================
-Zundapp Installation
-====================
 
-Set environment variables
-=========================
+## Zundapp Installation ##
+
+### Set environment variables ###
 
 The following environment variables should be set:
 
@@ -176,8 +166,7 @@ ZUNDAPPDBUSER=<databaseuser>
 ZUNDAPPDBPASSWORD=<databasepassword>
 ```
 
-Virtualenv + Zundapp install
-============================
+### Virtualenv + Zundapp install ###
 
 ```
 virtualenv zundapp-env
@@ -187,8 +176,7 @@ source zundapp-env/bin/activate
 pip install -r zundapp/requirements/requirements.txt
 ```
 
-Zundapp Development
-===================
+### Zundapp Development ###
 
 Syncing database:
 
@@ -197,8 +185,7 @@ django-admin.py syncdb --settings=zundapp.settings.dev --pythonpath=$ZUNDAPPPATH
 ```
 
 
-Zundapp Production
-==================
+### Zundapp Production ###
 
 Syncing database:
 
@@ -209,32 +196,28 @@ django-admin.py schemamigration apps.reports --initial --settings=zundapp.settin
 django-admin.py migrate apps.reports --settings=zundapp.settings.prod --pythonpath=$ZUNDAPPPATH
 ```
 
-Zundapp Commands
-================
+## Zundapp Commands ##
 
-Client Session Report
----------------------
+### Client Session Report ###
 
 ```
 django-admin.py get_report api-clientsessions --settings=zundapp.settings.prod --pythonpath=$ZUNDAPPPATH
 ```
 
-Retrieve Access Points
-----------------------
+### Retrieve Access Points ###
 
 ```
 django-admin.py get_access_points --settings=zundapp.settings.prod --pythonpath=$ZUNDAPPPATH
 ```
 
-Calculate Access Point load
----------------------------
+### Calculate Access Point load ###
 
 ```
 django-admin.py calc_ap_load --settings=zundapp.settings.prod --pythonpath=$ZUNDAPPPATH
 ```
 
-Cisco RESTful API
-=================
+## Cisco RESTful API ##
+
 Information regarding the RESTful API can be found on the Cisco Prime Infra server at the below url:
 
 https://<host>/webacs/api/v1/
