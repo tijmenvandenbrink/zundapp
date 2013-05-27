@@ -65,7 +65,7 @@ LOGGING = {
         },
         'apps.reports': {
             'handlers': ['console'],
-            'level': 'DEBUG',
+            'level': 'INFO',
         },
     }
 }

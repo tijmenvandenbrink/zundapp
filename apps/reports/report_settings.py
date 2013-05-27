@@ -5,6 +5,10 @@ SAMPLE_INTERVAL = 60
 # "Reporting Period" you've set when creating the api-clientsessions report in Cisco Prime Infra
 CALCULATE_AP_LOAD_LAG = 3900
 
+# Specifies what the minimum average session throughput in Mbits should be to take the session into account and use it
+# for Access Point Load calculations. Set to 0 if you don't want to filter sessions out.
+BW_LOW_WATERMARK = 0.01
+
 # Specify which access point specs to use by default
 DEFAULT_AP_TYPE = 'AIRONET2600'
 

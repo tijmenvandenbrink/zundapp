@@ -10,7 +10,7 @@ from django.db.models import Q
 
 from ....reports.models import ClientSession, AccessPoint, AccessPointLoad
 from ....reports.utils import get_mcs_index, get_available_bandwidth
-from ....reports.report_settings import SAMPLE_INTERVAL, CALCULATE_AP_LOAD_LAG
+from ....reports.report_settings import SAMPLE_INTERVAL, CALCULATE_AP_LOAD_LAG, BW_LOW_WATERMARK
 from zundapp.settings.base import TIME_ZONE
 
 logger = logging.getLogger(__name__)
@@ -49,15 +49,16 @@ def calculate_bandwidth(timestamp, **options):
     start = timestamp
     end = timestamp + timedelta(seconds=SAMPLE_INTERVAL)
 
-    sessions = ClientSession.objects.filter(Q(association_time__lte=start,
-                                              disassociation_time__gte=start, disassociation_time__lte=end) |
-                                            Q(association_time__lte=start, disassociation_time__gte=end) |
-                                            Q(association_time__gte=start, association_time__lte=end,
-                                              disassociation_time__lte=end) |
-                                            Q(association_time__lte=start, status='Associated') |
-                                            Q(association_time__lte=end, status='Associated') |
-                                            Q(association_time__gte=start, association_time__lte=end,
-                                              disassociation_time__gte=end))
+    sessions = ClientSession.objects.filter(avg_session_throughput__gte=BW_LOW_WATERMARK
+                                            ).filter(Q(association_time__lte=start,
+                                                       disassociation_time__gte=start, disassociation_time__lte=end) |
+                                                     Q(association_time__lte=start, disassociation_time__gte=end) |
+                                                     Q(association_time__gte=start, association_time__lte=end,
+                                                       disassociation_time__lte=end) |
+                                                     Q(association_time__lte=start, status='Associated') |
+                                                     Q(association_time__lte=end, status='Associated') |
+                                                     Q(association_time__gte=start, association_time__lte=end,
+                                                       disassociation_time__gte=end))
 
     logger.debug("Found a total of {} concurrent sessions during {} - {}".format(len(sessions),
                                                                                  start.strftime('%a %b %d %H:%M %Y %Z'),
@@ -142,3 +143,6 @@ class Command(BaseCommand):
                                                                     ).strftime('%a %b %d %H:%M %Y %Z')))
             calculate_bandwidth(t, **options)
             t += timedelta(seconds=SAMPLE_INTERVAL)
+
+        logger.info("Successfully ran calc_ap_load from: {} till {}".format(t.strftime('%a %b %d %H:%M %Y %Z'),
+                                                                            now.strftime('%a %b %d %H:%M %Y %Z')))
