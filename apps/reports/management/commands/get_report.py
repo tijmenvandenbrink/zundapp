@@ -63,7 +63,7 @@ def get_client_sessions():
                     'reason': data['reasonMsg'],
                     'e2e': data['e2eVersion'],
                     'data_retries': data['clientDataRetriesString'],
-                    'rts_retries': data['clientRtsRetriesString'],
+                    'rts_retries': data['clientRtsRetriesString'].replace('N/A', '0'),
                     'mobility_status': data['mobilityStatus'],
                     'network_access_id': data['pmipNai'],
                     'pmip_state': data['pmipState'],
