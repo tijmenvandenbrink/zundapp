@@ -19,7 +19,10 @@ def get_client_sessions():
     for session in r.json()['mgmtResponse']['reportDataDTO']['dataRows']['dataRow']:
         data = {}
         for record in session['entries']['entry']:
-            data[record['attributeName']] = record['dataValue']
+            if record['dataValue'] == 'N/A':
+                data[record['attributeName']] = None
+            else:
+                data[record['attributeName']] = record['dataValue']
 
         sessionStartTime = parse_datetime(data['sessionStartTime'])
 
@@ -62,7 +65,6 @@ def get_client_sessions():
                     'status': data['status'],
                     'reason': data['reasonMsg'],
                     'e2e': data['e2eVersion'],
-                    'data_retries': data['clientDataRetriesString'],
                     'mobility_status': data['mobilityStatus'],
                     'network_access_id': data['pmipNai'],
                     'pmip_state': data['pmipState'],
@@ -72,9 +74,6 @@ def get_client_sessions():
                     'local_link_identifier': data['pmipLocalLinkId'],
                     'lma': data['pmipLmaName']
                     }
-
-        if data.get('rts_retries', 0) == 'N/A':
-            defaults['rts_retries'] = 0
 
         if not data['sessionEndTime'] == '':
             defaults['disassociation_time'] = parse_datetime(data['sessionEndTime'])
