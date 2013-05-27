@@ -51,7 +51,7 @@ class ClientSession(models.Model):
     global_unique = models.CharField(max_length=50, blank=True)
     local_unique = models.CharField(max_length=50, blank=True)
     link_local = models.GenericIPAddressField(protocol='IPv6', blank=True, null=True)
-    speed = models.CharField(max_length=20, blank=True)
+    speed = models.CharField(max_length=20, blank=True, null=True)
     ccx = models.CharField(max_length=50, blank=True)
     ap_mac_address = models.CharField(max_length=17)
     ap_ip = models.GenericIPAddressField(protocol='both')
