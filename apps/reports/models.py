@@ -78,7 +78,7 @@ class ClientSession(models.Model):
     rts_retries = models.PositiveIntegerField(blank=True, null=True)
     mobility_status = models.CharField(max_length=20, blank=True)
     network_access_id = models.CharField(max_length=20, blank=True)
-    pmip_state = models.CharField(max_length=20, blank=True)
+    pmip_state = models.CharField(max_length=20, blank=True, null=True)
     connected_interface = models.CharField(max_length=50, blank=True)
     home_address = models.CharField(max_length=50, blank=True)
     access_technology_type = models.CharField(max_length=50, blank=True)
