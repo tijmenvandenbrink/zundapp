@@ -63,7 +63,6 @@ def get_client_sessions():
                     'reason': data['reasonMsg'],
                     'e2e': data['e2eVersion'],
                     'data_retries': data['clientDataRetriesString'],
-                    'rts_retries': data['clientRtsRetriesString'].replace('N/A', '0'),
                     'mobility_status': data['mobilityStatus'],
                     'network_access_id': data['pmipNai'],
                     'pmip_state': data['pmipState'],
@@ -73,6 +72,9 @@ def get_client_sessions():
                     'local_link_identifier': data['pmipLocalLinkId'],
                     'lma': data['pmipLmaName']
                     }
+
+        if data.get('rts_retries', 0) == 'N/A':
+            defaults['rts_retries'] = 0
 
         if not data['sessionEndTime'] == '':
             defaults['disassociation_time'] = parse_datetime(data['sessionEndTime'])
