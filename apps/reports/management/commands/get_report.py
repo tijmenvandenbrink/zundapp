@@ -84,10 +84,6 @@ def get_client_sessions():
             logger.debug("Session is still ongoing: {} - {}".format(data['clientUsername'], data['sessionStartTime']))
             defaults['session_duration'] = 0
 
-        logger.debug("Saving ClientSession object: {} - {} - {}".format(data['clientUsername'],
-                                                                        data['sessionStartTime'],
-                                                                        defaults))
-
         cs, created = ClientSession.objects.get_or_create(client_mac_address=data['clientMacAddress'],
                                                           association_time=parse_datetime(data['sessionStartTime']),
                                                           defaults=defaults)
@@ -96,6 +92,13 @@ def get_client_sessions():
             for k, v in defaults.items():
                 setattr(cs, k, v)
             cs.save()
+            logger.info("Updated ClientSession object: {} - {} - {}".format(data['clientUsername'],
+                                                                            data['sessionStartTime'],
+                                                                            data['sessionEndTime']))
+        else:
+            logger.info("Saved ClientSession object: {} - {} - {}".format(data['clientUsername'],
+                                                                          data['sessionStartTime'],
+                                                                          data['sessionEndTime']))
 
 
 class Command(BaseCommand):
