@@ -27,7 +27,7 @@ def get_client_sessions():
         sessionStartTime = parse_datetime(data['sessionStartTime'])
 
         defaults = {'client_ip_address': data['clientIpAddress'],
-                    'client_mac_address': data['clientMacAddress'],
+                    'client_username': data['clientUsername'],
                     'vendor': data['vendor'],
                     'ap_name': data['lradName'],
                     'device_name': data['deviceName'],
@@ -81,13 +81,14 @@ def get_client_sessions():
             defaults['disassociation_time'] = parse_datetime(data['sessionEndTime'])
             defaults['session_duration'] = (parse_datetime(data['sessionEndTime']) - sessionStartTime).total_seconds()
         else:
-            logger.debug("Session is still ongoing: {}".format(data['clientUsername'], data['sessionStartTime']))
+            logger.debug("Session is still ongoing: {} - {}".format(data['clientUsername'], data['sessionStartTime']))
             defaults['session_duration'] = 0
 
         logger.debug("Saving ClientSession object: {} - {} - {}".format(data['clientUsername'],
                                                                         data['sessionStartTime'],
                                                                         defaults))
-        cs, created = ClientSession.objects.get_or_create(client_username=data['clientUsername'],
+
+        cs, created = ClientSession.objects.get_or_create(client_mac_address=data['clientMacAddress'],
                                                           association_time=parse_datetime(data['sessionStartTime']),
                                                           defaults=defaults)
 

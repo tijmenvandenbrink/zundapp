@@ -87,7 +87,7 @@ class ClientSession(models.Model):
 
     class Meta:
         ordering = ['-association_time']
-        unique_together = ('client_username', 'association_time')
+        unique_together = ('client_mac_address', 'association_time')
 
     def __unicode__(self):
         return "{} - ({} - {})".format(self.client_username, self.association_time, self.disassociation_time)
