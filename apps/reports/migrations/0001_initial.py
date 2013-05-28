@@ -85,8 +85,8 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal(u'reports', ['ClientSession'])
 
-        # Adding unique constraint on 'ClientSession', fields ['client_username', 'association_time']
-        db.create_unique(u'reports_clientsession', ['client_username', 'association_time'])
+        # Adding unique constraint on 'ClientSession', fields ['client_mac_address', 'association_time']
+        db.create_unique(u'reports_clientsession', ['client_mac_address', 'association_time'])
 
         # Adding model 'AccessPoint'
         db.create_table(u'reports_accesspoint', (
@@ -140,8 +140,8 @@ class Migration(SchemaMigration):
         # Removing unique constraint on 'AccessPointLoad', fields ['ap_name', 'timestamp']
         db.delete_unique(u'reports_accesspointload', ['ap_name', 'timestamp'])
 
-        # Removing unique constraint on 'ClientSession', fields ['client_username', 'association_time']
-        db.delete_unique(u'reports_clientsession', ['client_username', 'association_time'])
+        # Removing unique constraint on 'ClientSession', fields ['client_mac_address', 'association_time']
+        db.delete_unique(u'reports_clientsession', ['client_mac_address', 'association_time'])
 
         # Deleting model 'UniqueClient'
         db.delete_table(u'reports_uniqueclient')
@@ -208,7 +208,7 @@ class Migration(SchemaMigration):
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
         },
         u'reports.clientsession': {
-            'Meta': {'ordering': "['-association_time']", 'unique_together': "(('client_username', 'association_time'),)", 'object_name': 'ClientSession'},
+            'Meta': {'ordering': "['-association_time']", 'unique_together': "(('client_mac_address', 'association_time'),)", 'object_name': 'ClientSession'},
             'access_technology_type': ('django.db.models.fields.CharField', [], {'max_length': '50', 'null': 'True', 'blank': 'True'}),
             'anchor_controller': ('django.db.models.fields.GenericIPAddressField', [], {'max_length': '39', 'null': 'True', 'blank': 'True'}),
             'ap_ip': ('django.db.models.fields.GenericIPAddressField', [], {'max_length': '39'}),
