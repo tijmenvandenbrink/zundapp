@@ -13,6 +13,7 @@ Telindus-ISIT retains ownership of all right, title, and interest (including cop
 The Software and accompanying documentation are the confidential property of Telindus-ISIT. Licensee will maintain the Software and accompanying documentation in strict confidence.
 Unauthorized use of the Software will result in automatic termination of the license granted hereunder without limitation to the remedies Telindus-ISIT is legally entitled to.
 Upon termination Licensee will destroy or return to Telindus-ISIT all copies of the Software, including all accompanying documentation.
+
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL TELINDUS-ISIT OR ITS LICENSORS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 This Agreement shall be governed by the laws of the Netherlands. Disputes shall be brought exclusively before the competent courts of Utrecht, the Netherlands.
