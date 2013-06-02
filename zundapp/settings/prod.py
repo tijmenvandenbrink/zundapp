@@ -57,7 +57,7 @@ LOGGING = {
             'filename': PROJECT_ROOT.child('log') + "/zundapp.log",
             'maxBytes': 50000,
             'backupCount': 10,
-            'formatter': 'standard',
+            'formatter': 'simple',
         },
         'console': {
             'level': 'DEBUG',
