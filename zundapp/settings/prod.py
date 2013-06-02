@@ -51,6 +51,14 @@ LOGGING = {
             'filters': ['require_debug_false'],
             'class': 'django.utils.log.AdminEmailHandler'
         },
+        'logfile': {
+            'level':'INFO',
+            'class':'logging.handlers.RotatingFileHandler',
+            'filename': PROJECT_ROOT.child('log') + "/zundapp.log",
+            'maxBytes': 50000,
+            'backupCount': 10,
+            'formatter': 'standard',
+        },
         'console': {
             'level': 'DEBUG',
             'class': 'logging.StreamHandler',
@@ -64,7 +72,7 @@ LOGGING = {
             'propagate': True,
         },
         'apps.reports': {
-            'handlers': ['console'],
+            'handlers': ['console', 'logfile'],
             'level': 'INFO',
         },
     }
