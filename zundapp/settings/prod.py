@@ -55,9 +55,9 @@ LOGGING = {
             'level':'INFO',
             'class':'logging.handlers.RotatingFileHandler',
             'filename': PROJECT_ROOT.child('log') + "/zundapp.log",
-            'maxBytes': 50000,
+            'maxBytes': 5000000,
             'backupCount': 10,
-            'formatter': 'simple',
+            'formatter': 'verbose',
         },
         'console': {
             'level': 'DEBUG',
