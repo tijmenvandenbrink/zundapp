@@ -135,6 +135,7 @@ class Command(BaseCommand):
         else:
             t = now - timedelta(seconds=CALCULATE_AP_LOAD_LAG)
 
+        start = t
         logger.info("Running calc_ap_load starting from: {} till {}".format(t.strftime('%a %b %d %H:%M %Y %Z'),
                                                                             now.strftime('%a %b %d %H:%M %Y %Z')))
         while t <= now:
@@ -144,5 +145,5 @@ class Command(BaseCommand):
             calculate_bandwidth(t, **options)
             t += timedelta(seconds=SAMPLE_INTERVAL)
 
-        logger.info("Successfully ran calc_ap_load from: {} till {}".format(t.strftime('%a %b %d %H:%M %Y %Z'),
+        logger.info("Successfully ran calc_ap_load from: {} till {}".format(start.strftime('%a %b %d %H:%M %Y %Z'),
                                                                             now.strftime('%a %b %d %H:%M %Y %Z')))
