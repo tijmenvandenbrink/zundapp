@@ -123,6 +123,7 @@ class AccessPoint(models.Model):
     def __unicode__(self):
         return "{} ({})".format(self.name, self.type)
 
+
 class AccessPointLoad(models.Model):
     """
         This model holds the maximum bandwidth available to clients
@@ -138,7 +139,13 @@ class AccessPointLoad(models.Model):
     clients_mcs_5 = models.PositiveIntegerField()
     clients_mcs_6 = models.PositiveIntegerField()
     clients_mcs_7 = models.PositiveIntegerField()
-    bandwidth_available = models.DecimalField(max_digits=10, decimal_places=1)
+    bandwidth_available = models.DecimalField(max_digits=10, decimal_places=2)
+    snr_mean = models.FloatField(blank=True, null=True)
+    snr_std = models.FloatField(blank=True, null=True)
+    snr_var = models.FloatField(blank=True, null=True)
+    rssi_mean = models.FloatField(blank=True, null=True)
+    rssi_std = models.FloatField(blank=True, null=True)
+    rssi_var = models.FloatField(blank=True, null=True)
 
     class Meta:
         ordering = ['ap_name', 'timestamp']

@@ -14,7 +14,9 @@ DEFAULT_AP_TYPE = 'AIRONET2600'
 
 # Mapping of RSSI to MCS index per access point type
 RSSI_MCS_MAP = {'AIRONET2600': {0: -91, 1: -90, 2: -89, 3: -88, 4: -85, 5: -80, 6: -78, 7: -75},
+                'AIRONET1550': {0: -93, 1: -91, 2: -89, 3: -86, 4: -82, 5: -78, 6: -77, 7: -75},
                 }
 # Mapping of MCS index to datarate per access point type
 MCS_DATARATE_MAP = {'AIRONET2600': {0: 7.2, 1: 14.3, 2: 21.7, 3: 28.9, 4: 43.3, 5: 57.8, 6: 65, 7: 72.2},
+                    'AIRONET1550': {0: 7.2, 1: 14.3, 2: 21.7, 3: 28.9, 4: 43.3, 5: 57.8, 6: 65, 7: 72.2},
                     }

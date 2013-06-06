@@ -3,6 +3,7 @@ import sys
 from datetime import datetime, timedelta
 import pytz
 from optparse import make_option
+from numpy import array, mean, var, std
 
 from django.core.management.base import BaseCommand
 from django.db import IntegrityError
@@ -66,12 +67,34 @@ def calculate_bandwidth(timestamp, **options):
 
     data = {}
     for access_point in AccessPoint.objects.all():
-        data.setdefault(access_point.name, {0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0})
+        data.setdefault(access_point.name, {0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0,
+                                            'snr': [],
+                                            'rssi': []})
 
     for session in sessions:
         data[session.ap_name][get_mcs_index(session.rssi)] += 1
+        data[session.ap_name]['rssi'].append(session.rssi)
+        data[session.ap_name]['snr'].append(session.snr)
 
     for ap, stats in data.items():
+        if len(stats['snr']) == 0:
+            snr_mean = None
+            snr_var = None
+            snr_std = None
+        else:
+            snr_mean = mean(array(stats['snr']))
+            snr_var = var(array(stats['snr']))
+            snr_std = std(array(stats['snr']))
+
+        if len(stats['rssi']) == 0:
+            rssi_mean = None
+            rssi_var = None
+            rssi_std = None
+        else:
+            rssi_mean = mean(array(stats['rssi']))
+            rssi_var = var(array(stats['rssi']))
+            rssi_std = std(array(stats['rssi']))
+
         apl = AccessPointLoad(ap_name=ap,
                               timestamp=timestamp,
                               clients_mcs_0=stats[0],
@@ -82,7 +105,14 @@ def calculate_bandwidth(timestamp, **options):
                               clients_mcs_5=stats[5],
                               clients_mcs_6=stats[6],
                               clients_mcs_7=stats[7],
-                              bandwidth_available=get_available_bandwidth(stats))
+                              bandwidth_available=get_available_bandwidth(stats),
+                              snr_mean=snr_mean,
+                              snr_std=snr_std,
+                              snr_var=snr_var,
+                              rssi_mean=rssi_mean,
+                              rssi_std=rssi_std,
+                              rssi_var=rssi_var,
+                              )
 
         try:
             apl.save()
@@ -102,7 +132,13 @@ def calculate_bandwidth(timestamp, **options):
                                                         clients_mcs_5=stats[5],
                                                         clients_mcs_6=stats[6],
                                                         clients_mcs_7=stats[7],
-                                                        bandwidth_available=get_available_bandwidth(stats))
+                                                        bandwidth_available=get_available_bandwidth(stats),
+                                                        snr_mean=snr_mean,
+                                                        snr_std=snr_std,
+                                                        snr_var=snr_var,
+                                                        rssi_mean=rssi_mean,
+                                                        rssi_std=rssi_std,
+                                                        rssi_var=rssi_var)
 
 
 class Command(BaseCommand):
