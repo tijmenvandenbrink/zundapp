@@ -95,11 +95,11 @@ def get_client_sessions():
             for k, v in defaults.items():
                 setattr(cs, k, v)
             cs.save()
-            logger.info("Updated ClientSession object: {} - {} - {}".format(data['clientUsername'],
+            logger.info("Updated ClientSession object: {} - {} - {}".format(data.get('clientUsername', 'Unknown'),
                                                                             data['sessionStartTime'],
                                                                             data['sessionEndTime']))
         else:
-            logger.info("Saved ClientSession object: {} - {} - {}".format(data['clientUsername'],
+            logger.info("Saved ClientSession object: {} - {} - {}".format(data.get('clientUsername', 'Unknown'),
                                                                           data['sessionStartTime'],
                                                                           data['sessionEndTime']))
 
@@ -114,4 +114,4 @@ class Command(BaseCommand):
         logger.debug('Running "{}" report from Cisco Prime Infra'.format(report))
         if report == 'api-clientsessions':
             get_client_sessions()
-            logger.info('Running "{}" report finished successfully.')
+            logger.info('Running "{}" report finished successfully.'.format(report))
