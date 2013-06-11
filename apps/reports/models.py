@@ -139,13 +139,19 @@ class AccessPointLoad(models.Model):
     clients_mcs_5 = models.PositiveIntegerField()
     clients_mcs_6 = models.PositiveIntegerField()
     clients_mcs_7 = models.PositiveIntegerField()
+    total_clients = models.PositiveIntegerField()
     bandwidth_available = models.DecimalField(max_digits=10, decimal_places=2)
+    snr_median = models.FloatField(blank=True, null=True)
     snr_mean = models.FloatField(blank=True, null=True)
     snr_std = models.FloatField(blank=True, null=True)
     snr_var = models.FloatField(blank=True, null=True)
+    rssi_median = models.FloatField(blank=True, null=True)
     rssi_mean = models.FloatField(blank=True, null=True)
     rssi_std = models.FloatField(blank=True, null=True)
     rssi_var = models.FloatField(blank=True, null=True)
+    ux_red = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
+    ux_yellow = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
+    ux_green = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
 
     class Meta:
         ordering = ['ap_name', 'timestamp']

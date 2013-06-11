@@ -3,15 +3,15 @@ import sys
 from datetime import datetime, timedelta
 import pytz
 from optparse import make_option
-from numpy import array, mean, var, std
+from numpy import array, mean, var, std, median
 
 from django.core.management.base import BaseCommand
 from django.db import IntegrityError
 from django.db.models import Q
 
 from ....reports.models import ClientSession, AccessPoint, AccessPointLoad
-from ....reports.utils import get_mcs_index, get_available_bandwidth
-from ....reports.report_settings import SAMPLE_INTERVAL, CALCULATE_AP_LOAD_LAG, BW_LOW_WATERMARK
+from ....reports.utils import get_mcs_index, get_available_bandwidth, get_ux
+from ....reports.report_settings import *
 from zundapp.settings.base import TIME_ZONE
 
 logger = logging.getLogger(__name__)
@@ -67,51 +67,69 @@ def calculate_bandwidth(timestamp, **options):
 
     data = {}
     for access_point in AccessPoint.objects.all():
-        data.setdefault(access_point.name, {0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0,
+        data.setdefault(access_point.name, {'clients': {0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0},
+                                            'total_clients': 0,
                                             'snr': [],
-                                            'rssi': []})
+                                            'rssi': [],
+                                            'ux_red': 0.0,
+                                            'ux_yellow': 0.0,
+                                            'ux_green': 0.0})
 
     for session in sessions:
-        data[session.ap_name][get_mcs_index(session.rssi)] += 1
+        data[session.ap_name]['clients'][get_mcs_index(session.rssi)] += 1
+        data[session.ap_name]['total_clients'] += 1
         data[session.ap_name]['rssi'].append(session.rssi)
         data[session.ap_name]['snr'].append(session.snr)
 
+        if session.snr <= SNR_LOW_WATERMARK:
+            data[session.ap_name]['ux_red'] += 1
+        elif SNR_LOW_WATERMARK < session.snr < SNR_HIGH_WATERMARK:
+            data[session.ap_name]['ux_yellow'] += 1
+        else:
+            data[session.ap_name]['ux_green'] += 1
+
     for ap, stats in data.items():
         if len(stats['snr']) == 0:
-            snr_mean = None
-            snr_var = None
-            snr_std = None
+            snr_median = snr_mean = snr_var = snr_std = None
         else:
+            snr_median = median(array(stats['snr']))
             snr_mean = mean(array(stats['snr']))
             snr_var = var(array(stats['snr']))
             snr_std = std(array(stats['snr']))
 
         if len(stats['rssi']) == 0:
-            rssi_mean = None
-            rssi_var = None
-            rssi_std = None
+            rssi_median = rssi_mean = rssi_var = rssi_std = None
         else:
+            rssi_median = median(array(stats['rssi']))
             rssi_mean = mean(array(stats['rssi']))
             rssi_var = var(array(stats['rssi']))
             rssi_std = std(array(stats['rssi']))
 
+        ux = get_ux(stats['ux_red'], stats['ux_yellow'], stats['ux_green'], stats['total_clients'])
+
         apl = AccessPointLoad(ap_name=ap,
                               timestamp=timestamp,
-                              clients_mcs_0=stats[0],
-                              clients_mcs_1=stats[1],
-                              clients_mcs_2=stats[2],
-                              clients_mcs_3=stats[3],
-                              clients_mcs_4=stats[4],
-                              clients_mcs_5=stats[5],
-                              clients_mcs_6=stats[6],
-                              clients_mcs_7=stats[7],
-                              bandwidth_available=get_available_bandwidth(stats),
+                              clients_mcs_0=stats['clients'][0],
+                              clients_mcs_1=stats['clients'][1],
+                              clients_mcs_2=stats['clients'][2],
+                              clients_mcs_3=stats['clients'][3],
+                              clients_mcs_4=stats['clients'][4],
+                              clients_mcs_5=stats['clients'][5],
+                              clients_mcs_6=stats['clients'][6],
+                              clients_mcs_7=stats['clients'][7],
+                              total_clients=stats['total_clients'],
+                              bandwidth_available=get_available_bandwidth(stats['clients']),
+                              snr_median=snr_median,
                               snr_mean=snr_mean,
                               snr_std=snr_std,
                               snr_var=snr_var,
+                              rssi_median=rssi_median,
                               rssi_mean=rssi_mean,
                               rssi_std=rssi_std,
                               rssi_var=rssi_var,
+                              ux_red=ux['ux_red'],
+                              ux_yellow=ux['ux_yellow'],
+                              ux_green=ux['ux_green'],
                               )
 
         try:
@@ -132,13 +150,20 @@ def calculate_bandwidth(timestamp, **options):
                                                         clients_mcs_5=stats[5],
                                                         clients_mcs_6=stats[6],
                                                         clients_mcs_7=stats[7],
+                                                        total_clients=stats['total_clients'],
                                                         bandwidth_available=get_available_bandwidth(stats),
+                                                        snr_median=snr_median,
                                                         snr_mean=snr_mean,
                                                         snr_std=snr_std,
                                                         snr_var=snr_var,
+                                                        rssi_median=rssi_median,
                                                         rssi_mean=rssi_mean,
                                                         rssi_std=rssi_std,
-                                                        rssi_var=rssi_var)
+                                                        rssi_var=rssi_var,
+                                                        ux_red=stats['ux_red'] / stats['total_clients'] * 100,
+                                                        ux_yellow=stats['ux_yellow'] / stats['total_clients'] * 100,
+                                                        ux_green=stats['ux_green'] / stats['total_clients'] * 100,
+                                                        )
 
 
 class Command(BaseCommand):

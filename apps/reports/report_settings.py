@@ -9,6 +9,13 @@ CALCULATE_AP_LOAD_LAG = 3900
 # for Access Point Load calculations. Set to 0 if you don't want to filter sessions out.
 BW_LOW_WATERMARK = 0.01
 
+# Specifies RED/YELLOW/GREEN thresholds used to determine the User Experience.
+# SNR <= SNR_LOW_WATERMARK == RED experience
+# SNR_LOW_WATERMARK < SNR < SNR_HIGH_WATERMARK == YELLOW experience
+# SRR >= SNR_HIGH_WATERMARK == GREEN experience
+SNR_LOW_WATERMARK = 15
+SNR_HIGH_WATERMARK = 20
+
 # Specify which access point specs to use by default
 DEFAULT_AP_TYPE = 'AIRONET2600'
 

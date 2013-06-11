@@ -104,6 +104,29 @@ def get_env_variable(var_name):
     raise ImproperlyConfigured(error_msg)
 
 
+def get_ux(ux_red=0.0, ux_yellow=0.0, ux_green=0.0, total_clients=0):
+    """ Returns the user experience distribution in percentages
+
+    :params ux_red: Number of clients that had a RED user experience
+    :type ux_red: float
+    :params ux_yellow: Number of clients that had a YELLOW user experience
+    :type ux_yellow: float
+    :params ux_green: Number of clients that had a GREEN user experience
+    :type ux_green: float
+    :params total_clients: Total number of clients
+    :type total_clients: int
+    :returns: Dict
+    """
+    if total_clients == 0:
+        ux_red = ux_yellow = ux_green = 0.0
+    else:
+        ux_red = ux_red / total_clients * 100.0
+        ux_yellow = ux_yellow / total_clients * 100.0
+        ux_green = ux_green / total_clients * 100.0
+
+    return {'ux_red': ux_red, 'ux_yellow': ux_yellow, 'ux_green': ux_green}
+
+
 class CiscoPrimeResource():
     """ Get resources from Cisco Prime Infra API """
 
