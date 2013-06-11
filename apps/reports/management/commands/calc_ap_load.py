@@ -151,7 +151,7 @@ def calculate_bandwidth(timestamp, **options):
                                                         clients_mcs_6=stats['clients'][6],
                                                         clients_mcs_7=stats['clients'][7],
                                                         total_clients=stats['total_clients'],
-                                                        bandwidth_available=get_available_bandwidth(stats),
+                                                        bandwidth_available=get_available_bandwidth(stats['clients']),
                                                         snr_median=snr_median,
                                                         snr_mean=snr_mean,
                                                         snr_std=snr_std,
