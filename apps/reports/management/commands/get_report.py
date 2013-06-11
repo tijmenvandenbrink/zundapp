@@ -18,6 +18,9 @@ def get_client_sessions():
 
     for session in r.json()['mgmtResponse']['reportDataDTO']['dataRows']['dataRow']:
         data = {}
+        if not type(session) == dict:
+            continue
+
         for record in session['entries']['entry']:
             if record['dataValue'] == 'N/A':
                 data[record['attributeName']] = None

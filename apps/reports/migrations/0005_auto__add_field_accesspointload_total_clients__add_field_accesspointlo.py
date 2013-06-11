@@ -10,7 +10,7 @@ class Migration(SchemaMigration):
     def forwards(self, orm):
         # Adding field 'AccessPointLoad.total_clients'
         db.add_column(u'reports_accesspointload', 'total_clients',
-                      self.gf('django.db.models.fields.PositiveIntegerField')(default=None),
+                      self.gf('django.db.models.fields.PositiveIntegerField')(default=0),
                       keep_default=False)
 
         # Adding field 'AccessPointLoad.snr_median'
