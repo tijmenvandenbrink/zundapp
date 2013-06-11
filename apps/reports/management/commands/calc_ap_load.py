@@ -160,9 +160,9 @@ def calculate_bandwidth(timestamp, **options):
                                                         rssi_mean=rssi_mean,
                                                         rssi_std=rssi_std,
                                                         rssi_var=rssi_var,
-                                                        ux_red=stats['ux_red'] / stats['total_clients'] * 100,
-                                                        ux_yellow=stats['ux_yellow'] / stats['total_clients'] * 100,
-                                                        ux_green=stats['ux_green'] / stats['total_clients'] * 100,
+                                                        ux_red=ux['ux_red'],
+                                                        ux_yellow=ux['ux_yellow'],
+                                                        ux_green=ux['ux_green'],
                                                         )
 
 
