@@ -1,31 +1,6 @@
 from django.db import models
 
 
-class UniqueClient(models.Model):
-    """
-        This model displays all unique clients by the time, protocol, and controller filters that you select.
-        A unique client is determined by the MAC address of the client device.
-    """
-    pass
-
-
-class ClientCount(models.Model):
-    """
-        This model displays the total number of active clients on your wireless network.
-
-        The Client Count model displays data on the numbers of clients that connected to the network through a specific
-        device, in a specific geographical area, or through a specific or multiple SSIDs.
-    """
-    pass
-
-
-class ClientTraffic(models.Model):
-    """
-
-    """
-    pass
-
-
 class ClientSession(models.Model):
     """
         This model provides client sessions for the given period of time. It displays the history of client sessions,
@@ -159,3 +134,31 @@ class AccessPointLoad(models.Model):
 
     def __unicode__(self):
         return "{} - {}".format(self.ap_name, self.timestamp)
+
+
+class AuthenticationSuccesRate(models.Model):
+    """
+        This model holds the Authentication success rate.
+        We make a distinction between eligible and ineligible rejects.
+
+        pct_accepted_clean = accepted / (accepted + eligible_rejected) * 100
+        pct_rejected_clean = eligible_rejected / (accepted + eligible_rejected) * 100
+
+        pct_accepted_total = accepted / (accepted + eligible_rejected + ineligible_rejected) * 100
+        pct_rejected_total = (eligible_rejected + ineligible_rejected) /
+                                                            (accepted + eligible_rejected + ineligible_rejected) * 100
+    """
+    hostname = models.CharField(max_length=50)
+    timestamp = models.DateTimeField()
+    accepted = models.PositiveIntegerField()
+    eligible_rejected = models.PositiveIntegerField()
+    ineligible_rejected = models.PositiveIntegerField()
+    pct_accepted_clean = models.DecimalField(max_digits=5, decimal_places=2)
+    pct_accepted_total = models.DecimalField(max_digits=5, decimal_places=2)
+
+    class Meta:
+        ordering = ['hostname', 'timestamp']
+        unique_together = ("hostname", "timestamp")
+
+    def __unicode__(self):
+        return "{} - {}".format(self.hostname, self.timestamp)

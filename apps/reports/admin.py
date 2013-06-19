@@ -1,5 +1,5 @@
 from django.contrib import admin
-from ..reports.models import ClientSession, AccessPoint, AccessPointLoad
+from ..reports.models import ClientSession, AccessPoint, AccessPointLoad, AuthenticationSuccesRate
 
 
 class ClientSessionAdmin(admin.ModelAdmin):
@@ -26,6 +26,12 @@ class AccessPointLoadAdmin(admin.ModelAdmin):
     search_fields = ('ap_name', )
 
 
+class AuthenticationSuccesRateAdmin(admin.ModelAdmin):
+    list_display = ('hostname', 'timestamp', 'accepted', 'eligible_rejected', 'ineligible_rejected',
+                    'pct_accepted_clean', 'pct_rejected_clean', 'pct_accepted_total', 'pct_rejected_total')
+    list_filter = ('hostname', 'timestamp')
+
 admin.site.register(ClientSession, ClientSessionAdmin)
 admin.site.register(AccessPoint, AccessPointAdmin)
 admin.site.register(AccessPointLoad, AccessPointLoadAdmin)
+admin.site.register(AuthenticationSuccesRate, AuthenticationSuccesRateAdmin)
