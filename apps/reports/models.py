@@ -153,8 +153,8 @@ class AuthenticationSuccesRate(models.Model):
     accepted = models.PositiveIntegerField()
     eligible_rejected = models.PositiveIntegerField()
     ineligible_rejected = models.PositiveIntegerField()
-    pct_accepted_clean = models.DecimalField(max_digits=5, decimal_places=2)
-    pct_accepted_total = models.DecimalField(max_digits=5, decimal_places=2)
+    pct_accepted_clean = models.DecimalField(max_digits=5, decimal_places=2, null=True)
+    pct_accepted_total = models.DecimalField(max_digits=5, decimal_places=2, null=True)
 
     class Meta:
         ordering = ['hostname', 'timestamp']
